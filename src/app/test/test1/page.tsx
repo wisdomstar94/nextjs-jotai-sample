@@ -1,15 +1,16 @@
 "use client";
 
 import { counterAtom } from "@/atoms/counter.atom";
-import { useAtomLocalStorageValue } from "@/atoms/localstorage-value";
-import { useAtomSessionStorageValue } from "@/atoms/sessionstorage-value";
+import { localStorageValueAtom } from "@/atoms/localstorage-value";
+import { sessionStorageValueAtom } from "@/atoms/sessionstorage-value";
+import { useAtomWithStorage } from "@/hooks/use-atom-with-storage/use-atom-with-storage.hook";
 import { useAtom } from "jotai";
 import { useState } from "react";
 
 export default function Page() {
   const [count, setCounter] = useAtom(counterAtom);
-  const localStorageValue = useAtomLocalStorageValue();
-  const sessionStorageValue = useAtomSessionStorageValue();
+  const localStorageValue = useAtomWithStorage(localStorageValueAtom);
+  const sessionStorageValue = useAtomWithStorage(sessionStorageValueAtom);
   const [inputedText, setInputedText] = useState("");
   const [inputedText2, setInputedText2] = useState("");
 
