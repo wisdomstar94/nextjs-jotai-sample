@@ -1,19 +1,15 @@
 "use client";
 
 import { counterAtom } from "@/atoms/counter.atom";
-import { localStorageValueAtom } from "@/atoms/localstorage-value";
-import { sessionStorageValueAtom } from "@/atoms/sessionstorage-value";
+import { useAtomLocalStorageValue } from "@/atoms/localstorage-value";
+import { useAtomSessionStorageValue } from "@/atoms/sessionstorage-value";
 import { useAtom } from "jotai";
 import { useState } from "react";
 
 export default function Page() {
   const [count, setCounter] = useAtom(counterAtom);
-  const [localStorageValue, setLocalStorageValue] = useAtom(
-    localStorageValueAtom
-  );
-  const [sessionStorageValue, setSessionStorageValue] = useAtom(
-    sessionStorageValueAtom
-  );
+  const localStorageValue = useAtomLocalStorageValue();
+  const sessionStorageValue = useAtomSessionStorageValue();
   const [inputedText, setInputedText] = useState("");
   const [inputedText2, setInputedText2] = useState("");
 
@@ -24,8 +20,22 @@ export default function Page() {
       </div>
       <div className="w-full relative">
         count : {count} <br />
-        localStorageValue : {localStorageValue} <br />
-        sessionStorageValue : {sessionStorageValue} <br />
+        <span>
+          {!localStorageValue.isMounted ? (
+            "loading..."
+          ) : (
+            <>localStorageValue : {localStorageValue.value}</>
+          )}
+        </span>
+        <br />
+        <span>
+          {!sessionStorageValue.isMounted ? (
+            "loading..."
+          ) : (
+            <>sessionStorageValue : {sessionStorageValue.value}</>
+          )}
+        </span>
+        <br />
       </div>
       <div className="w-full relative flex flex-wrap gap-2">
         <button
@@ -55,7 +65,7 @@ export default function Page() {
         <button
           className="inline-flex px-3 py-1.5 text-xs border border-slate-500 cursor-pointer hover:bg-slate-200"
           onClick={() => {
-            setLocalStorageValue(inputedText);
+            localStorageValue.setValue(inputedText);
           }}
         >
           localStorageValue 변경하기
@@ -71,7 +81,7 @@ export default function Page() {
         <button
           className="inline-flex px-3 py-1.5 text-xs border border-slate-500 cursor-pointer hover:bg-slate-200"
           onClick={() => {
-            setSessionStorageValue(inputedText2);
+            sessionStorageValue.setValue(inputedText2);
           }}
         >
           sessionStorageValue 변경하기
